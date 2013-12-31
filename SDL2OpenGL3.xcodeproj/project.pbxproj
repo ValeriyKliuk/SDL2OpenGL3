@@ -12,6 +12,10 @@
 		29D9C84A1871EDA3001DB2F1 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29D9C8491871EDA3001DB2F1 /* Cocoa.framework */; };
 		29D9C84C1871EDA9001DB2F1 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29D9C84B1871EDA9001DB2F1 /* OpenGL.framework */; };
 		29D9C84F1871EDF3001DB2F1 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29D9C84E1871EDF3001DB2F1 /* SDL2.framework */; };
+		3C05DD1E1872628F003C4261 /* Tutorial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3C05DD1D1872628F003C4261 /* Tutorial.cpp */; };
+		3C05DD22187278EF003C4261 /* Tutorial2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3C05DD20187278EF003C4261 /* Tutorial2.cpp */; };
+		3C05DD2518727FA0003C4261 /* tutorial2.frag in Sources */ = {isa = PBXBuildFile; fileRef = 3C05DD2318727FA0003C4261 /* tutorial2.frag */; };
+		3C05DD2618727FA0003C4261 /* tutorial2.vert in Sources */ = {isa = PBXBuildFile; fileRef = 3C05DD2418727FA0003C4261 /* tutorial2.vert */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -35,6 +39,12 @@
 		29D9C84B1871EDA9001DB2F1 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		29D9C84E1871EDF3001DB2F1 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SDL2.framework; sourceTree = "<group>"; };
 		29D9C8501871F7D7001DB2F1 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
+		3C05DD1C18726282003C4261 /* Tutorial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tutorial.h; sourceTree = "<group>"; };
+		3C05DD1D1872628F003C4261 /* Tutorial.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Tutorial.cpp; sourceTree = "<group>"; };
+		3C05DD20187278EF003C4261 /* Tutorial2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Tutorial2.cpp; sourceTree = "<group>"; };
+		3C05DD21187278EF003C4261 /* Tutorial2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tutorial2.h; sourceTree = "<group>"; };
+		3C05DD2318727FA0003C4261 /* tutorial2.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = tutorial2.frag; sourceTree = "<group>"; };
+		3C05DD2418727FA0003C4261 /* tutorial2.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = tutorial2.vert; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,6 +86,8 @@
 				29D9C84D1871EDE0001DB2F1 /* Frameworks */,
 				29D9C83F1871ED11001DB2F1 /* main.cpp */,
 				29D9C8411871ED11001DB2F1 /* SDL2OpenGL3.1 */,
+				3C05DD1818725BAC003C4261 /* tutorial2 */,
+				3C05DD1F187267CF003C4261 /* Tutorial1 */,
 			);
 			path = SDL2OpenGL3;
 			sourceTree = "<group>";
@@ -86,6 +98,26 @@
 				29D9C84E1871EDF3001DB2F1 /* SDL2.framework */,
 			);
 			path = Frameworks;
+			sourceTree = "<group>";
+		};
+		3C05DD1818725BAC003C4261 /* tutorial2 */ = {
+			isa = PBXGroup;
+			children = (
+				3C05DD2318727FA0003C4261 /* tutorial2.frag */,
+				3C05DD2418727FA0003C4261 /* tutorial2.vert */,
+				3C05DD20187278EF003C4261 /* Tutorial2.cpp */,
+				3C05DD21187278EF003C4261 /* Tutorial2.h */,
+			);
+			name = tutorial2;
+			sourceTree = "<group>";
+		};
+		3C05DD1F187267CF003C4261 /* Tutorial1 */ = {
+			isa = PBXGroup;
+			children = (
+				3C05DD1C18726282003C4261 /* Tutorial.h */,
+				3C05DD1D1872628F003C4261 /* Tutorial.cpp */,
+			);
+			name = Tutorial1;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -139,7 +171,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3C05DD22187278EF003C4261 /* Tutorial2.cpp in Sources */,
 				29D9C8401871ED11001DB2F1 /* main.cpp in Sources */,
+				3C05DD2518727FA0003C4261 /* tutorial2.frag in Sources */,
+				3C05DD1E1872628F003C4261 /* Tutorial.cpp in Sources */,
+				3C05DD2618727FA0003C4261 /* tutorial2.vert in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -219,7 +255,7 @@
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/vkliuk/Documents/Draft/Testing/SDL2OpenGL3/SDL2OpenGL3/Frameworks,
+					/Library/Frameworks,
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -243,7 +279,7 @@
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/vkliuk/Documents/Draft/Testing/SDL2OpenGL3/SDL2OpenGL3/Frameworks,
+					/Library/Frameworks,
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
