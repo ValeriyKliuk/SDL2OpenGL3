@@ -1,13 +1,14 @@
 //
-//  Tutorial2.cpp
+//  Tutorial3.cpp
 //  SDL2OpenGL3
 //
 //
 
-#include "Tutorial2.h"
+#include "Tutorial3.h"
+
 
 /* A simple function that will read a file into an allocated char pointer buffer */
-char* Tutorial2::filetobuf(char *file)
+char* Tutorial3::filetobuf(char *file)
 {
     FILE *fptr;
     long length;
@@ -29,15 +30,15 @@ char* Tutorial2::filetobuf(char *file)
 }
 
 /* A simple function that prints a message, the error code returned by SDL, and quits the application */
-void Tutorial2::sdldie(char *msg)
+void Tutorial3::sdldie(char *msg)
 {
     printf("%s: %s\n", msg, SDL_GetError());
     SDL_Quit();
     exit(1);
 }
 
-void Tutorial2::setupwindow()
-{//SDL_Window *window, SDL_GLContext *context)
+void Tutorial3::setupwindow()
+{
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {/* Initialize SDL's Video subsystem */
         sdldie("Unable to initialize SDL"); /* Or die on error */
     }
@@ -47,24 +48,25 @@ void Tutorial2::setupwindow()
      * but it should default to the core profile */
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
-
+    
     /* Request for GLSL 150 */
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
     SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
-
+    
     
     /* Turn on double buffering with a 24bit Z buffer.
      * You may need to change this to 16 or 32 for your system */
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
     
+    /* Enable multisampling for a nice antialiased effect */
+    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
 
     
     
-    
-    
     /* Create our window centered at 512x512 resolution */
-    mainwindow = SDL_CreateWindow("Tutorial2", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,512, 512, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
+    mainwindow = SDL_CreateWindow("Tutorial3", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,512, 512, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
     if (!mainwindow) {/* Die if creation failed */
         sdldie("Unable to create window");
     }
@@ -74,12 +76,17 @@ void Tutorial2::setupwindow()
     
     /* This makes our buffer swap syncronized with the monitor's vertical refresh */
     SDL_GL_SetSwapInterval(1);
+    
+    /* Enable Z depth testing so objects closest to the viewpoint are in front of objects further away */
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
 }
 
-void Tutorial2::drawscene()
-{//SDL_Window *window)
+void Tutorial3::drawscene()
+{
     int i; /* Simple iterator */
-    GLuint vao, vbo[2]; /* Create handles for our Vertex Array Object and two Vertex Buffer Objects */
+    GLuint vao, vbo[1]; /* Create handles for our Vertex Array Object and One Vertex Buffer Object */
+    
     int IsCompiled_VS, IsCompiled_FS;
     int IsLinked;
     int maxLength;
@@ -87,18 +94,51 @@ void Tutorial2::drawscene()
     char *fragmentInfoLog;
     char *shaderProgramInfoLog;
     
-    /* We're going to create a simple diamond made from lines */
-    const GLfloat diamond[4][2] = {
-        {  0.0,  1.0  }, /* Top point */
-        {  1.0,  0.0  }, /* Right point */
-        {  0.0, -1.0  }, /* Bottom point */
-        { -1.0,  0.0  } }; /* Left point */
+    GLfloat projectionmatrix[16]; /* Our projection matrix starts with all 0s */
+    GLfloat modelmatrix[16]; /* Our model matrix  */
+    /* An identity matrix we use to perform the equivalant of glLoadIdentity */
+    const GLfloat identitymatrix[16] = IDENTITY_MATRIX4;
     
-    const GLfloat colors[4][3] = {
-        {  1.0,  0.0,  0.0  }, /* Red */
-        {  0.0,  1.0,  0.0  }, /* Green */
-        {  0.0,  0.0,  1.0  }, /* Blue */
-        {  1.0,  1.0,  1.0  } }; /* White */
+    /* An array of 12 Vertices to make 4 coloured triangles in the shape of a tetrahedron*/
+    const struct Vertex tetrahedron[12] =
+    {
+        {
+            {  1.0,  1.0,  1.0  },{  1.0f,  0.0f,  0.0f  }
+        },
+        {
+            { -1.0, -1.0,  1.0  },{  1.0f,  0.0f,  0.0f  }
+        },
+        {
+            { -1.0,  1.0, -1.0  },{  1.0f,  0.0f,  0.0f  }
+        },
+        {
+            {  1.0,  1.0,  1.0  },{  0.0f,  1.0f,  0.0f  }
+        },
+        {
+            { -1.0, -1.0,  1.0  },{  0.0f,  1.0f,  0.0f  }
+        },
+        {
+            {  1.0, -1.0, -1.0  },{  0.0f,  1.0f,  0.0f  }
+        },
+        {
+            {  1.0,  1.0,  1.0  },{  0.0f,  0.0f,  1.0f  }
+        },
+        {
+            { -1.0,  1.0, -1.0  },{  0.0f,  0.0f,  1.0f  }
+        },
+        {
+            {  1.0, -1.0, -1.0  },{  0.0f,  0.0f,  1.0f  }
+        },
+        {
+            { -1.0, -1.0,  1.0  },{  1.0f,  1.0f,  1.0f  }
+        },
+        {
+            { -1.0,  1.0, -1.0  },{  1.0f,  1.0f,  1.0f  }
+        },
+        {
+            {  1.0, -1.0, -1.0  },{  1.0f,  1.0f,  1.0f  }
+        }
+    };
     
     /* These pointers will receive the contents of our shader source code files */
     GLchar *vertexsource, *fragmentsource;
@@ -115,50 +155,45 @@ void Tutorial2::drawscene()
     /* Bind our Vertex Array Object as the current used object */
     glBindVertexArray(vao);
     
-    /* Allocate and assign two Vertex Buffer Objects to our handle */
-    glGenBuffers(2, vbo);
+    /* Allocate and assign One Vertex Buffer Object to our handle */
+    glGenBuffers(1, vbo);
     
-    /* Bind our first VBO as being the active buffer and storing vertex attributes (coordinates) */
+    /* Bind our VBO as being the active buffer and storing vertex attributes (coordinates + colors) */
     glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
     
-    /* Copy the vertex data from diamond to our buffer */
-    /* 8 * sizeof(GLfloat) is the size of the diamond array, since it contains 8 GLfloat values */
-    glBufferData(GL_ARRAY_BUFFER, 8 * sizeof(GLfloat), diamond, GL_STATIC_DRAW);
+    /* Copy the vertex data from tetrahedron to our buffer */
+    /* 12 * sizeof(GLfloat) is the size of the tetrahedrom array, since it contains 12 Vertex values */
+    glBufferData ( GL_ARRAY_BUFFER, 12 * sizeof ( struct Vertex ), tetrahedron, GL_STATIC_DRAW );
     
-    /* Specify that our coordinate data is going into attribute index 0, and contains two floats per vertex */
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, 0);
-    
+    /* Specify that our coordinate data is going into attribute index 0, and contains three doubles per vertex */
+    /* Note stride = sizeof ( struct Vertex ) and pointer = ( const GLvoid* ) 0 */
+    glVertexAttribPointer ( ( GLuint ) 0, 3, GL_DOUBLE, GL_FALSE,  sizeof ( struct Vertex ), ( const GLvoid* ) offsetof (struct Vertex,position) );
+	
     /* Enable attribute index 0 as being used */
     glEnableVertexAttribArray(0);
     
-    /* Bind our second VBO as being the active buffer and storing vertex attributes (colors) */
-    glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
-    
-    /* Copy the color data from colors to our buffer */
-    /* 12 * sizeof(GLfloat) is the size of the colors array, since it contains 12 GLfloat values */
-    glBufferData(GL_ARRAY_BUFFER, 12 * sizeof(GLfloat), colors, GL_STATIC_DRAW);
-    
     /* Specify that our color data is going into attribute index 1, and contains three floats per vertex */
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    /* Note stride = sizeof ( struct Vertex ) and pointer = ( const GLvoid* ) ( 3 * sizeof ( GLdouble ) ) i.e. the size (in bytes)
+     occupied by the first attribute (position) */
+    glVertexAttribPointer ( ( GLuint ) 1, 3, GL_FLOAT, GL_FALSE, sizeof ( struct Vertex ), ( const GLvoid* ) offsetof(struct Vertex, color) ) ;
     
     /* Enable attribute index 1 as being used */
-    glEnableVertexAttribArray(1);
+    glEnableVertexAttribArray ( 1 );/* Bind our second VBO as being the active buffer and storing vertex attributes (colors) */
     
     /* Read our shaders into the appropriate buffers */
-    vertexsource = filetobuf("/Users/valeriy/tutorial2.vert");
-    fragmentsource = filetobuf("/Users/valeriy/tutorial2.frag");
+    vertexsource = filetobuf("/Users/valeriy/tutorial3.vert");
+    fragmentsource = filetobuf("/Users/valeriy/tutorial3.frag");
     
-    /* Create an empty vertex shader handle */
+    /* Assign our handles a "name" to new shader objects */
     vertexshader = glCreateShader(GL_VERTEX_SHADER);
+    fragmentshader = glCreateShader(GL_FRAGMENT_SHADER);
     
-    /* Send the vertex shader source code to GL */
-    /* Note that the source code is NULL character terminated. */
-    /* GL will automatically detect that therefore the length info can be 0 in this case (the last parameter) */
+    /* Associate the source code buffers with each handle */
     glShaderSource(vertexshader, 1, (const GLchar**)&vertexsource, 0);
+    glShaderSource(fragmentshader, 1, (const GLchar**)&fragmentsource, 0);
     
-    /* Compile the vertex shader */
+    /* Compile our shader objects */
     glCompileShader(vertexshader);
-    
     glGetShaderiv(vertexshader, GL_COMPILE_STATUS, &IsCompiled_VS);
     if(IsCompiled_VS == false)
     {
@@ -174,18 +209,7 @@ void Tutorial2::drawscene()
         free(vertexInfoLog);
         return;
     }
-    
-    /* Create an empty fragment shader handle */
-    fragmentshader = glCreateShader(GL_FRAGMENT_SHADER);
-    
-    /* Send the fragment shader source code to GL */
-    /* Note that the source code is NULL character terminated. */
-    /* GL will automatically detect that therefore the length info can be 0 in this case (the last parameter) */
-    glShaderSource(fragmentshader, 1, (const GLchar**)&fragmentsource, 0);
-    
-    /* Compile the fragment shader */
     glCompileShader(fragmentshader);
-    
     glGetShaderiv(fragmentshader, GL_COMPILE_STATUS, &IsCompiled_FS);
     if(IsCompiled_FS == false)
     {
@@ -201,10 +225,6 @@ void Tutorial2::drawscene()
         free(fragmentInfoLog);
         return;
     }
-    
-    /* If we reached this point it means the vertex and fragment shaders compiled and are syntax error free. */
-    /* We must link them together to make a GL shader program */
-    /* GL shader programs are monolithic. It is a single piece made of 1 vertex shader and 1 fragment shader. */
     /* Assign our program handle a "name" */
     shaderprogram = glCreateProgram();
     
@@ -212,57 +232,46 @@ void Tutorial2::drawscene()
     glAttachShader(shaderprogram, vertexshader);
     glAttachShader(shaderprogram, fragmentshader);
     
-    /* Bind attribute index 0 (coordinates) to in_Position and attribute index 1 (color) to in_Color */
-    /* Attribute locations must be setup before calling glLinkProgram. */
+    /* Bind attribute 0 (coordinates) to in_Position and attribute 1 (colors) to in_Color */
     glBindAttribLocation(shaderprogram, 0, "in_Position");
     glBindAttribLocation(shaderprogram, 1, "in_Color");
     
-    /* Link our program */
-    /* At this stage, the vertex and fragment programs are inspected, optimized and a binary code is generated for the shader. */
-    /* The binary code is uploaded to the GPU, if there is no error. */
+    /* Link our program, and set it as being actively used */
     glLinkProgram(shaderprogram);
-    
-    /* Again, we must check and make sure that it linked. If it fails, it would mean either there is a mismatch between the vertex */
-    /* and fragment shaders. It might be that you have surpassed your GPU's abilities. Perhaps too many ALU operations or */
-    /* too many texel fetch instructions or too many interpolators or dynamic loops. */
-    
-    glGetProgramiv(shaderprogram, GL_LINK_STATUS, (int *)&IsLinked);
-    if(IsLinked == false)
-    {
-        /* Noticed that glGetProgramiv is used to get the length for a shader program, not glGetShaderiv. */
-        glGetProgramiv(shaderprogram, GL_INFO_LOG_LENGTH, &maxLength);
-        
-        /* The maxLength includes the NULL character */
-        shaderProgramInfoLog = (char *)malloc(maxLength);
-        
-        /* Notice that glGetProgramInfoLog, not glGetShaderInfoLog. */
-        glGetProgramInfoLog(shaderprogram, maxLength, &maxLength, shaderProgramInfoLog);
-        
-        /* Handle the error in an appropriate way such as displaying a message or writing to a log file. */
-        /* In this simple program, we'll just leave */
-        free(shaderProgramInfoLog);
-        return;
-    }
-    
-    /* Load the shader into the rendering pipeline */
     glUseProgram(shaderprogram);
     
-    /* Loop our display increasing the number of shown vertexes each time.
-     * Start with 2 vertexes (a line) and increase to 3 (a triangle) and 4 (a diamond) */
-    for (i=2; i <= 4; i++)
+    /* Create our projection matrix with a 45 degree field of view
+     * a width to height ratio of 1 and view from .1 to 100 infront of us */
+    perspective(projectionmatrix, 45.0, 1.0, 0.1, 100.0);
+    
+    /* Loop our display rotating our model more each time. */
+    for (i=0; i < 360; i++)
     {
+        /* Load the identity matrix into modelmatrix. rotate the model, and move it back 5 */
+        memcpy(modelmatrix, identitymatrix, sizeof(GLfloat) * 16);
+        rotate(modelmatrix, (GLfloat)i * -1.0, X_AXIS);
+        rotate(modelmatrix, (GLfloat)i * 1.0, Y_AXIS);
+        rotate(modelmatrix, (GLfloat)i * 0.5, Z_AXIS);
+        translate(modelmatrix, 0, 0, -5.0);
+        
+        /* multiply our modelmatrix and our projectionmatrix. Results are stored in modelmatrix */
+        multiply4x4(modelmatrix, projectionmatrix);
+        
+        /* Bind our modelmatrix variable to be a uniform called mvpmatrix in our shaderprogram */
+        glUniformMatrix4fv(glGetUniformLocation(shaderprogram, "mvpmatrix"), 1, GL_FALSE, modelmatrix);
+        
         /* Make our background black */
         glClearColor(0.0, 0.0, 0.0, 1.0);
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
-        /* Invoke glDrawArrays telling that our data is a line loop and we want to draw 2-4 vertexes */
-        glDrawArrays(GL_LINE_LOOP, 0, i);
+        /* Invoke glDrawArrays telling that our data consists of individual triangles */
+        glDrawArrays(GL_TRIANGLES, 0, 12);
         
         /* Swap our buffers to make our changes visible */
         SDL_GL_SwapWindow(mainwindow);
         
-        /* Sleep for 2 seconds */
-        SDL_Delay(2000);
+        /* Sleep for roughly 33 milliseconds between frames */
+        SDL_Delay(33);
     }
     
     /* Cleanup all the things we bound and allocated */
@@ -278,11 +287,15 @@ void Tutorial2::drawscene()
     glDeleteVertexArrays(1, &vao);
     free(vertexsource);
     free(fragmentsource);
+//    vertexsource = filetobuf("/Users/valeriy/tutorial2.vert");
+//    fragmentsource = filetobuf("/Users/valeriy/tutorial2.frag");
+
 }
 
-void Tutorial2::destroywindow()
-{//SDL_Window *window, SDL_GLContext context)
+void Tutorial3::destroywindow()
+{
     SDL_GL_DeleteContext(maincontext);
     SDL_DestroyWindow(mainwindow);
     SDL_Quit();
 }
+

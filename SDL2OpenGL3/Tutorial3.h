@@ -1,28 +1,32 @@
 //
-//  Tutorial2.h
+//  Tutorial3.h
 //  SDL2OpenGL3
 //
 //
 
-#ifndef SDL2OpenGL3_Tutorial2_h
-#define SDL2OpenGL3_Tutorial2_h
+#ifndef SDL2OpenGL3_Tutorial3_h
+#define SDL2OpenGL3_Tutorial3_h
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <stddef.h> /* must include for the offsetof macro */
 
 #include <SDL2/SDL.h>
 #include <OpenGL/gl3.h>
 
+#include <math.h>
+#include "Utils.h"
 
-// http://www.opengl.org/wiki/Tutorial2:_VAOs,_VBOs,_Vertex_and_Fragment_Shaders_(C_/_SDL)
-class Tutorial2
+// http://www.opengl.org/wiki/Tutorial3:_Rendering_3D_Objects_(C_/SDL)
+class Tutorial3
 {
     
 public:
     
-    Tutorial2(){}
+    Tutorial3(){}
     
-    ~Tutorial2(){}
+    ~Tutorial3(){}
     
     char* filetobuf(char *file);
     
@@ -33,6 +37,12 @@ public:
     void drawscene();
     
     void destroywindow();
+    
+    struct Vertex
+    {
+        GLdouble position[3];
+        GLfloat color[3];
+    };
     
     
 private:

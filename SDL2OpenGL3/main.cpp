@@ -14,22 +14,74 @@
 
 #include "Tutorial.h"
 #include "Tutorial2.h"
+#include "Tutorial3.h"
+
 /* Our program's entry point */
 int main(int argc, char *argv[])
 {
-//    Tutorial *tutorial = new Tutorial();
-//    tutorial->execute();
+    int tutorialIndex = 3;
+    
+    
+    switch (tutorialIndex) {
+        case 1:
+        {
+            /****************************************
+             *                                      *
+             *             Tutorial1                *
+             *                                      *
+             ****************************************/
+            
+            Tutorial *tutorial = new Tutorial();
+            tutorial->execute();
+        
+        }
+            break;
+        case 2:
+        {
+            /****************************************
+             *                                      *
+             *             Tutorial2                *
+             *                                      *
+             ****************************************/
+            
+            Tutorial2 *tutorial2 = new Tutorial2();
+            
+            /* Create our window, opengl context, etc... */
+            tutorial2->setupwindow();
+            
+            /* Call our function that performs opengl operations */
+            tutorial2->drawscene();
+            
+            /* Delete our opengl context, destroy our window, and shutdown SDL */
+            tutorial2->destroywindow();
+        }
+            break;
+        case 3:
+        {
+            /****************************************
+             *                                      *
+             *             Tutorial3                *
+             *                                      *
+             ****************************************/
+            
+            Tutorial3 *tutorial3 = new Tutorial3();
+            
+            /* Create our window, opengl context, etc... */
+            tutorial3->setupwindow();
+            
+            /* Call our function that performs opengl operations */
+            tutorial3->drawscene();
+            
+            /* Delete our opengl context, destroy our window, and shutdown SDL */
+            tutorial3->destroywindow();
+        }
+            break;
+        default:
+            break;
+    }
 
-    Tutorial2 *tutorial2 = new Tutorial2();
     
-    /* Create our window, opengl context, etc... */
-    tutorial2->setupwindow();
     
-    /* Call our function that performs opengl operations */
-    tutorial2->drawscene();
-    
-    /* Delete our opengl context, destroy our window, and shutdown SDL */
-    tutorial2->destroywindow();
     return 0;
 }
 

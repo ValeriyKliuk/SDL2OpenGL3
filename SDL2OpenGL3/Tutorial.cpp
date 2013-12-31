@@ -2,8 +2,6 @@
 //  Tutorial.cpp
 //  SDL2OpenGL3
 //
-//  Created by Valeriy Kliuk on 12/30/2013.
-//  Copyright (c) 2013 Valeriy Kliuk. All rights reserved.
 //
 
 #include "Tutorial.h"

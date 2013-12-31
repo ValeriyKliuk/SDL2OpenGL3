@@ -16,6 +16,10 @@
 		3C05DD22187278EF003C4261 /* Tutorial2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3C05DD20187278EF003C4261 /* Tutorial2.cpp */; };
 		3C05DD2518727FA0003C4261 /* tutorial2.frag in Sources */ = {isa = PBXBuildFile; fileRef = 3C05DD2318727FA0003C4261 /* tutorial2.frag */; };
 		3C05DD2618727FA0003C4261 /* tutorial2.vert in Sources */ = {isa = PBXBuildFile; fileRef = 3C05DD2418727FA0003C4261 /* tutorial2.vert */; };
+		3C05DD291872AE39003C4261 /* Tutorial3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3C05DD281872AE39003C4261 /* Tutorial3.cpp */; };
+		3C05DD2D1872AFD8003C4261 /* tutorial3.frag in Sources */ = {isa = PBXBuildFile; fileRef = 3C05DD2B1872AFD8003C4261 /* tutorial3.frag */; };
+		3C05DD2E1872AFD8003C4261 /* tutorial3.vert in Sources */ = {isa = PBXBuildFile; fileRef = 3C05DD2C1872AFD8003C4261 /* tutorial3.vert */; };
+		3C05DD311872B154003C4261 /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3C05DD301872B154003C4261 /* Utils.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -45,6 +49,12 @@
 		3C05DD21187278EF003C4261 /* Tutorial2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tutorial2.h; sourceTree = "<group>"; };
 		3C05DD2318727FA0003C4261 /* tutorial2.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = tutorial2.frag; sourceTree = "<group>"; };
 		3C05DD2418727FA0003C4261 /* tutorial2.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = tutorial2.vert; sourceTree = "<group>"; };
+		3C05DD271872AE21003C4261 /* Tutorial3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tutorial3.h; sourceTree = "<group>"; };
+		3C05DD281872AE39003C4261 /* Tutorial3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Tutorial3.cpp; sourceTree = "<group>"; };
+		3C05DD2B1872AFD8003C4261 /* tutorial3.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = tutorial3.frag; sourceTree = "<group>"; };
+		3C05DD2C1872AFD8003C4261 /* tutorial3.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = tutorial3.vert; sourceTree = "<group>"; };
+		3C05DD2F1872B141003C4261 /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
+		3C05DD301872B154003C4261 /* Utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Utils.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,8 +96,10 @@
 				29D9C84D1871EDE0001DB2F1 /* Frameworks */,
 				29D9C83F1871ED11001DB2F1 /* main.cpp */,
 				29D9C8411871ED11001DB2F1 /* SDL2OpenGL3.1 */,
-				3C05DD1818725BAC003C4261 /* tutorial2 */,
+				3C05DD1818725BAC003C4261 /* Tutorial2 */,
 				3C05DD1F187267CF003C4261 /* Tutorial1 */,
+				3C05DD2A1872AE53003C4261 /* Tutorial3 */,
+				3C05DD321872B8B8003C4261 /* Utils */,
 			);
 			path = SDL2OpenGL3;
 			sourceTree = "<group>";
@@ -100,7 +112,7 @@
 			path = Frameworks;
 			sourceTree = "<group>";
 		};
-		3C05DD1818725BAC003C4261 /* tutorial2 */ = {
+		3C05DD1818725BAC003C4261 /* Tutorial2 */ = {
 			isa = PBXGroup;
 			children = (
 				3C05DD2318727FA0003C4261 /* tutorial2.frag */,
@@ -108,7 +120,7 @@
 				3C05DD20187278EF003C4261 /* Tutorial2.cpp */,
 				3C05DD21187278EF003C4261 /* Tutorial2.h */,
 			);
-			name = tutorial2;
+			name = Tutorial2;
 			sourceTree = "<group>";
 		};
 		3C05DD1F187267CF003C4261 /* Tutorial1 */ = {
@@ -118,6 +130,26 @@
 				3C05DD1D1872628F003C4261 /* Tutorial.cpp */,
 			);
 			name = Tutorial1;
+			sourceTree = "<group>";
+		};
+		3C05DD2A1872AE53003C4261 /* Tutorial3 */ = {
+			isa = PBXGroup;
+			children = (
+				3C05DD2B1872AFD8003C4261 /* tutorial3.frag */,
+				3C05DD2C1872AFD8003C4261 /* tutorial3.vert */,
+				3C05DD271872AE21003C4261 /* Tutorial3.h */,
+				3C05DD281872AE39003C4261 /* Tutorial3.cpp */,
+			);
+			name = Tutorial3;
+			sourceTree = "<group>";
+		};
+		3C05DD321872B8B8003C4261 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				3C05DD2F1872B141003C4261 /* Utils.h */,
+				3C05DD301872B154003C4261 /* Utils.cpp */,
+			);
+			name = Utils;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -172,9 +204,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				3C05DD22187278EF003C4261 /* Tutorial2.cpp in Sources */,
+				3C05DD291872AE39003C4261 /* Tutorial3.cpp in Sources */,
 				29D9C8401871ED11001DB2F1 /* main.cpp in Sources */,
 				3C05DD2518727FA0003C4261 /* tutorial2.frag in Sources */,
+				3C05DD311872B154003C4261 /* Utils.cpp in Sources */,
+				3C05DD2E1872AFD8003C4261 /* tutorial3.vert in Sources */,
 				3C05DD1E1872628F003C4261 /* Tutorial.cpp in Sources */,
+				3C05DD2D1872AFD8003C4261 /* tutorial3.frag in Sources */,
 				3C05DD2618727FA0003C4261 /* tutorial2.vert in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
